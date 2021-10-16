@@ -32,6 +32,7 @@ fun CameraCapture(
     onImageFile: (File) -> Unit = { }
 ) {
     val context = LocalContext.current
+
     Permission(
         permission = Manifest.permission.CAMERA,
         rationale = "You said you wanted a picture, so I'm going to have to ask for permission.",
@@ -49,9 +50,11 @@ fun CameraCapture(
             }
         }
     ) {
+        // If permission is granted, show content
         Box(modifier = modifier) {
             val lifecycleOwner = LocalLifecycleOwner.current
             val coroutineScope = rememberCoroutineScope()
+
             var previewUseCase by remember { mutableStateOf<UseCase>(Preview.Builder().build()) }
             val imageCaptureUseCase by remember {
                 mutableStateOf(
@@ -60,6 +63,7 @@ fun CameraCapture(
                         .build()
                 )
             }
+
             Box {
                 CameraPreview(
                     modifier = Modifier.fillMaxSize(),
@@ -80,9 +84,10 @@ fun CameraCapture(
                         }
                     }
                 ) {
-                    Text("Click!")
+                    Text("Snap!")
                 }
             }
+
             LaunchedEffect(previewUseCase) {
                 val cameraProvider = context.getCameraProvider()
                 try {
